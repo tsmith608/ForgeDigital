@@ -436,7 +436,9 @@ function ResultsStrip() {
 function LogoMarquee() {
   const logos = [
     "Plumbers", "Electricians", "HVAC",
-    "Landscaping", "Auto", "Cafes",
+    "Landscaping", "Auto", "Cafes", "Salons", "Cleaners",
+    "Notaries", "Contractors", "Roofers", "Masonry",
+    "Painters", "Carpenters"
   ];
 
   // Duplicate once for seamless loop

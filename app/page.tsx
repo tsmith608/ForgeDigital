@@ -7,6 +7,8 @@ import {
   Handshake, Menu, X, ArrowRight, Wrench, Droplets, Hammer,
   Phone, Mail, MapPin, Clock, Play, Users, ShieldCheck, Sparkles
 } from "lucide-react";
+import WhyWebsiteMattersSimple from "@/components/WhyWebsiteMattersSimple";
+
 
 /** ---------- Helpers ---------- */
 function useCounter(target: number, inView: boolean, duration = 1.2) {
@@ -294,6 +296,44 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* WHY WEBSITE MATTERS */}
+      <section className="py-32 text-center bg-black/35 backdrop-blur-sm">
+        <motion.h2 {...fadeUp(0)} className="text-4xl font-bold mb-4">
+          Why your website matters
+        </motion.h2>
+        <motion.p {...fadeUp(0.15)} className="text-zinc-200 max-w-2xl mx-auto mb-10">
+          For better or worse, the first impression isn’t a handshake anymore—it’s your homepage.  
+          A modern site brings in work while you’re still on the job.
+        </motion.p>
+
+        {/* 2x2 grid on small+ screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          <motion.div {...fadeUp(0.5)} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="text-5xl font-extrabold tracking-tight mb-2">81%</div>
+            <p className="text-zinc-300">of shoppers research online before choosing who to call.</p>
+            <p className="text-xs text-zinc-400 mt-3">Source: Retail Dive Consumer Survey</p>
+          </motion.div>
+          
+          <motion.div {...fadeUp(0.3)} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="text-5xl font-extrabold tracking-tight mb-2">76%</div>
+            <p className="text-zinc-300">of people who search locally visit a business within a day.</p>
+            <p className="text-xs text-zinc-400 mt-3">Source: Google Consumer Insights</p>
+          </motion.div>
+          
+          <motion.div {...fadeUp(0.4)} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="text-5xl font-extrabold tracking-tight mb-2">75%</div>
+            <p className="text-zinc-300">judge a company’s credibility by its web design.</p>
+            <p className="text-xs text-zinc-400 mt-3">Source: Stanford Web Credibility Project</p>
+          </motion.div>
+          
+          <motion.div {...fadeUp(0.2)} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="text-5xl font-extrabold tracking-tight mb-2">53%</div>
+            <p className="text-zinc-300">of visitors leave if a site takes over 3 seconds to load.</p>
+            <p className="text-xs text-zinc-400 mt-3">Source: Google / Think With Google</p>
+          </motion.div>
+        </div>
+      </section>
+      
       {/* HOW WE HELP */}
       <section id="services" className="py-32 px-6 md:px-20 text-center bg-black/35 backdrop-blur-sm">
         <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} viewport={{ once: true }} className="text-5xl font-bold mb-12">
@@ -302,8 +342,8 @@ export default function Home() {
 
         <motion.div variants={gridVariants} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} className="grid md:grid-cols-3 gap-10">
           {[
-            { Icon: Wrench,  title: "Modern Websites", desc: "Clean, fast, and easy to use — built like a well-tooled workshop and tuned for phones." },
-            { Icon: Droplets, title: "Story & Trust",   desc: "Your crew, your history, your pride. We tell it with photos, motion, and simple words." },
+            { Icon: Wrench,  title: "Modern Websites", desc: "Clean, fast, and easy to use. We will get you online quickly and efficiently." },
+            { Icon: Droplets, title: "Story & Trust",   desc: "Your crew, your mission, your story. We tell it with photos, motion, and simple words." },
             { Icon: Hammer,   title: "Support That Sticks", desc: "Updates, fixes, and a real person to call. No tickets to nowhere. We’ve got you." },
           ].map(({ Icon, title, desc }, i) => (
             <motion.div key={title} variants={cardVariants} custom={i} whileHover={{ y: -4, scale: 1.01 }} className="p-10 bg-white/10 rounded-2xl hover:bg-white/15 transition">
@@ -315,8 +355,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* RESULTS STRIP (counters) */}
-      <ResultsStrip />
+      
 
       {/* LOGO MARQUEE */}
       <LogoMarquee />
@@ -348,7 +387,7 @@ export default function Home() {
           <motion.div {...fadeUp(0.3)} className="p-8 rounded-2xl bg-white/10">
             <h3 className="text-2xl font-semibold mb-3">Our Approach</h3>
             <p className="text-zinc-200 leading-relaxed">
-              Were a team, born in raised in rural Pennsylvania, that believes in modernizing blue-collar and family-owned businesses so they can attract more customers and simplify orders in the digital age. We think you deserve enterprise-level polish without corporate nonsense.
+              Were a dedicated team, born and raised in rural Pennsylvania, that believes in modernizing blue-collar and family-owned businesses so they can attract more customers and simplify orders in the digital age. We think you deserve enterprise-level polish without corporate nonsense and inflated prices.
             </p>
           </motion.div>
 
@@ -356,7 +395,7 @@ export default function Home() {
             <li className="p-6 rounded-2xl bg-white/10">
               <Users className="w-6 h-6 text-amber-300 mb-3" />
               <h4 className="font-semibold mb-1">Owner-Led</h4>
-              <p className="text-zinc-200 text-sm">You work with us. No templates. Your input is encouraged.</p>
+              <p className="text-zinc-200 text-sm">No cookie-cutter templates. Your ideas are welcome, and your design will be unique.</p>
             </li>
             <li className="p-6 rounded-2xl bg-white/10">
               <ShieldCheck className="w-6 h-6 text-amber-300 mb-3" />
@@ -372,14 +411,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TESTIMONIAL */}
-      <section className="py-40 text-center bg-black/35 backdrop-blur-sm">
-        <motion.h2 {...fadeUp(0)} className="text-4xl font-bold mb-6">“They fixed how people see us.”</motion.h2>
-        <motion.p {...fadeUp(0.4)} className="text-zinc-100 italic max-w-2xl mx-auto mb-8">
-          “I’m a solo notary and don’t have time for tech. They built a clean site with online booking and mapped my service area. Calls picked up the first week.”
-        </motion.p>
-        <p className="text-amber-300 font-semibold">— Ronald Smith, Notary Services Limited</p>
-      </section>
+      
+
+
+
 
       {/* CONTACT (anchor + CTA opens panel) */}
       <section id="contact" className="py-32 text-center bg-black/30 backdrop-blur-sm">
@@ -397,40 +432,7 @@ export default function Home() {
 
 /** ---------- Widgets ---------- */
 
-// Results strip (animated counters)
-function ResultsStrip() {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.4 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  const sites = useCounter(4, inView);
-  const speed = useCounter(3, inView);
-  const leads = useCounter(50, inView);
 
-  return (
-    <section id="results" ref={ref} className="py-16 px-6 md:px-20 bg-black/35 backdrop-blur-sm">
-      <div className="grid md:grid-cols-3 gap-8 text-center">
-        <div className="p-6 rounded-2xl bg-white/10">
-          <div className="text-5xl font-bold">{sites}<span className="text-amber-300">+</span></div>
-          <p className="text-zinc-200 mt-2">years experience creating modern websites</p>
-        </div>
-        <div className="p-6 rounded-2xl bg-white/10">
-          <div className="text-5xl font-bold">{speed}x</div>
-          <p className="text-zinc-200 mt-2">faster load times on average</p>
-        </div>
-        <div className="p-6 rounded-2xl bg-white/10">
-          <div className="text-5xl font-bold">{leads}%</div>
-          <p className="text-zinc-200 mt-2">more growth on average than companies not on the web</p>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // Logo marquee (looping)
 function LogoMarquee() {
@@ -572,6 +574,16 @@ function BeforeAfter() {
           aria-label="Slider percentage"
         />
       </div>
+
+      <div className="mt-8 text-center">
+        <a
+          href="#contact"
+          className="inline-flex items-center gap-2 bg-amber-400 text-black font-semibold px-6 py-3 rounded-full hover:bg-amber-300 transition"
+        >
+          Start My Upgrade
+        </a>
+        
+      </div>
     </section>
   );
 }
@@ -619,19 +631,6 @@ function DemoAutoplay() {
         >
           <source src="/demo.mp4" type="video/mp4" />
         </video>
-
-        {/* Unmute button (only shown while muted) */}
-        {muted && (
-          <button
-            onClick={() => {
-              setMuted(false);
-              ref.current?.play().catch(() => {});
-            }}
-            className="absolute bottom-4 right-4 px-3 py-2 text-sm font-semibold rounded-full bg-amber-400 text-black hover:bg-amber-300"
-          >
-            Unmute
-          </button>
-        )}
       </div>
     </div>
   );
@@ -644,19 +643,10 @@ function DemoVideo() {
     <section id="demo" className="py-32 px-6 md:px-20 bg-black/30 backdrop-blur-sm">
       <h2 className="text-4xl font-bold text-center mb-4">See It in Action</h2>
       <p className="text-center text-zinc-200 mb-10">
-        A quick peek at how we can build you a modern, lead-ready build from the ground up.
+        A quick peek at how we can build you a modern, lead-ready site from the ground up.
       </p>
 
       <DemoAutoplay />
-
-      <div className="mt-8 text-center">
-        <a
-          href="#contact"
-          className="inline-flex items-center gap-2 bg-amber-400 text-black font-semibold px-6 py-3 rounded-full hover:bg-amber-300 transition"
-        >
-          Start My Upgrade
-        </a>
-      </div>
     </section>
   );
 }

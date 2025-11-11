@@ -642,7 +642,7 @@ function DemoVideo() {
     <section id="demo" className="py-32 px-6 md:px-20 bg-black/30 backdrop-blur-sm">
       <h2 className="text-4xl font-bold text-center mb-4">See It in Action</h2>
       <p className="text-center text-zinc-200 mb-10">
-        A quick peek at how we can build you a modern, lead-ready build from the gorund up.
+        A quick peek at how we can build you a modern, lead-ready build from the ground up.
       </p>
 
       <DemoAutoplay />

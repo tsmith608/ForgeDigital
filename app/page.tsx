@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import type { Variants } from "framer-motion";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import {
   Handshake, Menu, X, ArrowRight, Wrench, Droplets, Hammer,
@@ -47,17 +48,20 @@ export default function Home() {
     },
   };
   const cardVariants = {
-    hidden: (i: number) => ({
-      opacity: 0,
-      y: 30,
-      x: i % 2 === 0 ? -22 : 22,
-      scale: 0.98,
-    }),
-    show: {
-      opacity: 1, y: 0, x: 0, scale: 1,
-      transition: { type: "spring", stiffness: 90, damping: 16 },
-    },
-  };
+  hidden: (i: number) => ({
+    opacity: 0,
+    y: 30,
+    x: i % 2 === 0 ? -22 : 22,
+    scale: 0.98,
+  }),
+  show: {
+    opacity: 1,
+    y: 0,
+    x: 0,
+    scale: 1,
+    transition: { type: "spring" as const, stiffness: 90, damping: 16 },
+  },
+} satisfies Variants;
 
   // Close contact panel on ESC
   useEffect(() => {
@@ -430,28 +434,42 @@ function ResultsStrip() {
 
 // Logo marquee (looping)
 function LogoMarquee() {
-  const logos = ["AeroCo", "Martinez & Sons", "GreenHill", "PulseAI", "Bloom Café", "Eastside Electric"];
+  const logos = [
+    "AeroCo", "Martinez & Sons", "GreenHill",
+    "PulseAI", "Bloom Café", "Eastside Electric",
+  ];
+
+  // Duplicate once for seamless loop
+  const loop = [...logos, ...logos];
+
   return (
     <section className="py-12 bg-black/30 backdrop-blur-sm overflow-hidden">
-      <div className="whitespace-nowrap [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-        <div className="inline-block animate-[marquee_22s_linear_infinite]">
-          {logos.concat(logos).map((name, i) => (
-            <span key={i} className="mx-8 inline-flex items-center gap-2 text-zinc-200/80">
+      <div
+        className="whitespace-nowrap"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+          maskImage:
+            "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+        }}
+      >
+        <div className="inline-block animate-marquee">
+          {loop.map((name, i) => (
+            <span
+              key={`${name}-${i}`}
+              className="mx-8 inline-flex items-center gap-2 text-zinc-200/80"
+            >
               <span className="w-2 h-2 rounded-full bg-amber-300 inline-block" />
               {name}
             </span>
           ))}
         </div>
       </div>
-      <style jsx>{`
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-      `}</style>
     </section>
   );
 }
+
+
 
 // Before / After slider (drag to reveal)
 function BeforeAfter() {

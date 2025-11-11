@@ -374,11 +374,11 @@ export default function Home() {
 
       {/* TESTIMONIAL */}
       <section className="py-40 text-center bg-black/35 backdrop-blur-sm">
-        <motion.h2 {...fadeUp(0)} className="text-4xl font-bold mb-6">“They treated our little business like it mattered.”</motion.h2>
+        <motion.h2 {...fadeUp(0)} className="text-4xl font-bold mb-6">“They fixed how people see us.”</motion.h2>
         <motion.p {...fadeUp(0.4)} className="text-zinc-100 italic max-w-2xl mx-auto mb-8">
-          “We fix pipes. They fixed how people see us. Calls picked up the first week.”
+          “I’m a solo notary and don’t have time for tech. They built a clean site with online booking and mapped my service area. Calls picked up the first week.”
         </motion.p>
-        <p className="text-amber-300 font-semibold">— Rusty & Son Plumbing Co.</p>
+        <p className="text-amber-300 font-semibold">— Ronald Smith, Notary Services Limited</p>
       </section>
 
       {/* CONTACT (anchor + CTA opens panel) */}
@@ -408,8 +408,8 @@ function ResultsStrip() {
     io.observe(el);
     return () => io.disconnect();
   }, []);
-  const sites = useCounter(20, inView);
-  const speed = useCounter(4, inView);
+  const sites = useCounter(4, inView);
+  const speed = useCounter(3, inView);
   const leads = useCounter(50, inView);
 
   return (
@@ -417,7 +417,7 @@ function ResultsStrip() {
       <div className="grid md:grid-cols-3 gap-8 text-center">
         <div className="p-6 rounded-2xl bg-white/10">
           <div className="text-5xl font-bold">{sites}<span className="text-amber-300">+</span></div>
-          <p className="text-zinc-200 mt-2">small-business sites launched</p>
+          <p className="text-zinc-200 mt-2">years experience creating modern websites</p>
         </div>
         <div className="p-6 rounded-2xl bg-white/10">
           <div className="text-5xl font-bold">{speed}x</div>
@@ -435,8 +435,8 @@ function ResultsStrip() {
 // Logo marquee (looping)
 function LogoMarquee() {
   const logos = [
-    "AeroCo", "Martinez & Sons", "GreenHill",
-    "PulseAI", "Bloom Café", "Eastside Electric",
+    "Plumbers", "Electricians", "HVAC",
+    "Landscaping", "Auto", "Cafes",
   ];
 
   // Duplicate once for seamless loop

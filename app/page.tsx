@@ -7,8 +7,6 @@ import {
   Handshake, Menu, X, ArrowRight, Wrench, Droplets, Hammer,
   Phone, Mail, MapPin, Clock, Play, Users, ShieldCheck, Sparkles
 } from "lucide-react";
-import WhyWebsiteMattersSimple from "@/components/WhyWebsiteMattersSimple";
-
 
 /** ---------- Helpers ---------- */
 function useCounter(target: number, inView: boolean, duration = 1.2) {

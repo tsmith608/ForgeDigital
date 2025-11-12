@@ -71,6 +71,15 @@ export default function Home() {
   }, []);
   useEffect(() => { if (contactOpen && panelRef.current) panelRef.current.focus(); }, [contactOpen]);
 
+  // Lock background scroll while contact panel is open
+  useEffect(() => {
+    if (!contactOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [contactOpen]);
+
+
   // Scroll progress bar
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 20, mass: 0.2 });
@@ -164,118 +173,165 @@ export default function Home() {
           <>
             <motion.div
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               onClick={() => setContactOpen(false)}
             />
             <motion.aside
-              role="dialog" aria-modal="true" aria-label="Contact information and inquiry form"
-              ref={panelRef} tabIndex={-1}
-              initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Contact information and inquiry form"
+              ref={panelRef}
+              tabIndex={-1}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 90, damping: 18 }}
-              className="fixed top-0 right-0 h-full w-full max-w-md bg-zinc-950 z-50 shadow-2xl border-l border-white/10 flex flex-col"
+              // 100dvh prevents mobile address bar shrinking issues
+              className="fixed top-0 right-0 h-[100dvh] w-full max-w-md bg-zinc-950 z-50 shadow-2xl border-l border-white/10 flex flex-col"
             >
+              {/* Header stays fixed at top of panel */}
               <div className="flex items-center justify-between p-5 border-b border-white/10">
                 <div className="flex items-center gap-2">
                   <Handshake className="w-6 h-6 text-amber-400" />
                   <span className="font-semibold">Talk to Forge Digital</span>
                 </div>
-                <button onClick={() => setContactOpen(false)} className="p-2 rounded-lg hover:bg-white/10 transition" aria-label="Close contact panel">
+                <button
+                  onClick={() => setContactOpen(false)}
+                  className="p-2 rounded-lg hover:bg-white/10 transition"
+                  aria-label="Close contact panel"
+                >
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <div className="p-6 space-y-5">
-                <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-amber-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-zinc-400">Call or text</p>
-                    <a href="tel:+15709743189" className="font-medium hover:text-amber-400 transition">(570) 974-3189</a>
+
+              {/* Scrollable content area */}
+              <div className="flex-1 overflow-y-auto [-webkit-overflow-scrolling:touch]">
+                {/* Info */}
+                <div className="p-6 space-y-5">
+                  <div className="flex items-start gap-3">
+                    <Phone className="w-5 h-5 text-amber-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-zinc-400">Call or text</p>
+                      <a href="tel:+15709743189" className="font-medium hover:text-amber-400 transition">
+                        (570) 974-3189
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Mail className="w-5 h-5 text-amber-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-zinc-400">Email</p>
+                      <a href="mailto:contactforgedigital@gmail.com" className="font-medium hover:text-amber-400 transition">
+                        contactforgedigital@gmail.com
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-5 h-5 text-amber-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-zinc-400">Address</p>
+                      <p className="font-medium">220 Poplar Street<br/>Kane, PA 16735</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-5 h-5 text-amber-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-zinc-400">Hours</p>
+                      <p className="font-medium">Mon–Sun: 8am–8pm</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-amber-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-zinc-400">Email</p>
-                    <a href="mailto:contactforgedigital@gmail.com" className="font-medium hover:text-amber-400 transition">contactforgedigital@gmail.com</a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-amber-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-zinc-400">Address</p>
-                    <p className="font-medium">220 Poplar Street<br/>Kane, PA 16735</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-amber-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-zinc-400">Hours</p>
-                    <p className="font-medium">Mon–Sun: 8am–8pm</p>
-                  </div>
-                </div>
-              </div>
-              <div className="border-t border-white/10" />
-              <form
-                onSubmit={async (e) => {
-                e.preventDefault();
-                setSendState("sending");
-                const formEl = e.currentTarget as HTMLFormElement;
-                const data = new FormData(formEl);
 
-                try {
-                  const res = await fetch("/api/forge-inquiry", { method: "POST", body: data });
+                <div className="border-t border-white/10" />
 
-                  if (!res.ok) {
-                    // read server error so you actually see why
-                    const j = await res.json().catch(() => ({}));
-                    throw new Error(j.error || `HTTP ${res.status}`);
-                  }
+                {/* Form */}
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    setSendState("sending");
+                    const formEl = e.currentTarget as HTMLFormElement;
+                    const data = new FormData(formEl);
 
-                  setSendState("ok");
-                  formEl.reset();
-
-                  // optional: auto-clear success after a bit
-                  setTimeout(() => setSendState("idle"), 4000);
-                } catch (err) {
-                  console.error("inquiry send failed:", err);
-                  setSendState("err");
-                }
-              }}
-                className="p-6 space-y-4"
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm text-zinc-400">Name</label>
-                    <input name="name" required className="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400" placeholder="Your name" />
-                  </div>
-                  <div>
-                    <label className="text-sm text-zinc-400">Phone</label>
-                    <input name="phone" className="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400" placeholder="(555) 123-4567" />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-400">Email</label>
-                  <input type="email" name="email" required className="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400" placeholder="you@company.com" />
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-400">What do you need?</label>
-                  <textarea name="message" rows={4} required className="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400" placeholder="Website refresh, new site, online booking, SEO…" />
-                </div>
-
-                {/* Honeypot (hidden) */}
-                <input name="company" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-
-                <button
-                  type="submit"
-                  disabled={sendState === "sending"}
-                  className="w-full inline-flex items-center justify-center gap-2 bg-amber-400 text-black font-semibold px-4 py-3 rounded-xl hover:bg-amber-300 disabled:opacity-60 transition"
+                    try {
+                      const res = await fetch("/api/forge-inquiry", { method: "POST", body: data });
+                      if (!res.ok) {
+                        const j = await res.json().catch(() => ({}));
+                        throw new Error(j.error || `HTTP ${res.status}`);
+                      }
+                      setSendState("ok");
+                      formEl.reset();
+                      setTimeout(() => setSendState("idle"), 4000);
+                    } catch (err) {
+                      console.error("inquiry send failed:", err);
+                      setSendState("err");
+                    }
+                  }}
+                  className="p-6 space-y-4 pb-[env(safe-area-inset-bottom)]"
                 >
-                  {sendState === "sending" ? "Sending…" : "Send Inquiry"}
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                  {/* Honeypot (hidden) */}
+                  <input name="company" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
-                {sendState === "ok" && <p className="text-emerald-400 text-sm">Thanks — we’ll get back within one business day.</p>}
-                {sendState === "err" && <p className="text-red-400 text-sm">Couldn’t send right now. Try again in a minute.</p>}
-              </form>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm text-zinc-400">Name</label>
+                      <input
+                        name="name"
+                        required
+                        className="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400"
+                        placeholder="Your name"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm text-zinc-400">Phone</label>
+                      <input
+                        name="phone"
+                        className="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400"
+                        placeholder="(555) 123-4567"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-zinc-400">Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      className="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400"
+                      placeholder="you@company.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-zinc-400">What do you need?</label>
+                    <textarea
+                      name="message"
+                      rows={4}
+                      required
+                      className="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400"
+                      placeholder="Website refresh, new site, online booking, SEO…"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={sendState === "sending"}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-amber-400 text-black font-semibold px-4 py-3 rounded-xl hover:bg-amber-300 disabled:opacity-60 transition"
+                  >
+                    {sendState === "sending" ? "Sending…" : "Send Inquiry"}
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+
+                  {sendState === "ok" && (
+                    <p className="text-emerald-400 text-sm">Thanks — we’ll get back within one business day.</p>
+                  )}
+                  {sendState === "err" && (
+                    <p className="text-red-400 text-sm">Couldn’t send right now. Try again in a minute.</p>
+                  )}
+                </form>
+              </div>
             </motion.aside>
           </>
         )}
@@ -429,8 +485,6 @@ export default function Home() {
 }
 
 /** ---------- Widgets ---------- */
-
-
 
 // Logo marquee (looping)
 function LogoMarquee() {
